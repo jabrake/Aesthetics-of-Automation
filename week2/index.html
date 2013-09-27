@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src = "http://code.createjs.com/createjs-2013.05.14.min.js"></script>
+	<script>
+
+		var stage;
+		var queue;
+		var cols, rows;
+		var radius = 50;
+		var scale = radius*2;
+		var stageWidth = 1440; 
+		var stageHeight = 900;
+
+
+		var bubbleColor = "#CEECF5";
+		var clickColor = "white";
+		var strokeColor = "#58D3F7";
+
+		cols = stageWidth/scale;
+		rows = stageHeight/scale;
+
+		var pops = new Array();
+
+		var init = function() {
+			stage = new createjs.Stage("myCanvas");
+
+			queue = new createjs.LoadQueue(false);
+			queue.installPlugin(createjs.Sound);
+			queue.addEventListener("complete", handleComplete);
+			queue.loadManifest([{id:"sound", src:"pop.wav"}]);
+		};
+
+		function handleComplete(event) {
+
+			for (i = 0; i < cols; i++) {
+				for (j = 0; j < rows; j++) {
+
+					pops[i] = new createjs.Shape();
+					pops[i].addEventListener("click", handleClick);
+					pops[i].graphics.beginFill("#CEECF5").beginStroke("#58D3F7").drawCircle(50, 50, radius).endFill();
+					pops[i].x = i*scale;
+					pops[i].y = j*scale;
+
+					pops.push([i]);
+
+					stage.addChild(pops[i]);
+
+				};
+			};
+
+			//createjs.Tween.get(ball, {loop:true}).to({x:1390}, 1000).to({x:50}, 1000);
+			createjs.Ticker.addEventListener("tick", tick);
+
+		};
+
+		function handleClick(event) {
+			// var bmp = new createjs.Bitmap(queue.getResult("daisy"));
+			// bmp.x = Math.random()*1440;
+			// bmp.y = Math.random()*900;
+			// stage.addChild(bmp);
+
+			// var target = event.target;
+			// target.graphics.clear().beginFill(target.clickColor).beginStroke(target.strokeColor).drawCircle(pops[i].x, pops[i].y, radius).endFill();
+
+			var target = event.target;
+			target.graphics.clear();
+
+			createjs.Sound.play("sound");
+
+		};
+
+		function tick(event) {
+			stage.update();
+		};
+
+	</script>
+</head>
+
+<body onload="init();">
+
+	<canvas id = "myCanvas" width = "1440" height = "900">
+		ALTERNATIVE CONTENT
+	</canvas>
+
+</body>
+</html>

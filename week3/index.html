@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Blobby Pixel</title>
+	<script src = "http://code.createjs.com/createjs-2013.05.14.min.js"></script>
+	<script>
+
+	var canvas;
+	var stage;
+	var screen_width;
+	var screen_height;
+	var bmpAnimation;
+
+	var imgBlobMove = new Image();
+
+	var init = function() {
+		stage = document.getElementById("myCanvas");
+
+		imgBlobMove.onload = handleImageLoad;
+		imgBlobMove.onerror = handleImageError;
+		imgBlobMove.src = "sprite.png";
+	};
+
+	var handleImageLoad = function(e) {
+		startGame();
+	};
+
+	var startGame = function() {
+		stage = new createjs.Stage(myCanvas);
+		screen_width = stage.width;
+		screen_height = stage.height;
+
+		var spriteSheet = new createjs.spriteSheet({
+			images: [imgBlobMove],
+			frames: {width: 64, height: 64, regX: 32, regY: 32},
+			animations: {
+				walk: [0, 9, "walk"]
+			}
+		});
+
+		bmpAnimation = new createjs.BitmapAnimation(spriteSheet);
+		bmpAnimation.gotoAndPlay("walk");
+		bmpAnimation.shadow = new createjs.Shadow("#454", 0, 5, 4);
+
+		bmpAnimation.name = "blob1";
+		bmpAnimation.direction = 90;
+		bmpAnimation.vX = 4;
+		bmpAnimation.x = 16;
+		bmpAnimation.y = 32;
+
+		bmpAnimation.currentFrame = 0;
+		stage.addChild(bmpAnimation);
+
+		createjs.Ticker.addListener(window);
+		createjs.Ticker.useRAF = true;
+		createjs.Ticker.setFPS(60);
+	};
+
+	var handleImageError = function(e) {
+		console.log("Error Loading Image: " + e.target.src);
+	};
+
+	function tick() {
+		if (bmpAnimation.x >= screen_width - 16) {
+			bmpAnimation.direction = -90;
+		}
+
+		if (bmpAnimation.x < 16) {
+			bmpAnimation.direction = 90;
+		}
+
+		if (bmpAnimation.direction == 90) {
+			bmpAnimation.x += bmpAnimation.vX;
+		}
+		else {
+			bmpAnimation.x -= bmpAnimation.vX;
+		}
+
+		stage.update();
+	};
+
+	</script>
+</head>
+
+<body onload="init();">
+
+	<canvas id = "myCanvas" width = "1440" height = "900">
+		ALTERNATIVE CONTENT
+	</canvas>
+
+</body>
+</html>
