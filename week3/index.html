@@ -30,11 +30,11 @@
 		screen_width = stage.width;
 		screen_height = stage.height;
 
-		var spriteSheet = new createjs.spriteSheet({
-			images: [imgBlobMove],
-			frames: {width: 64, height: 64, regX: 32, regY: 32},
-			animations: {
-				walk: [0, 9, "walk"]
+		var spriteSheet = new createjs.SpriteSheet({
+			"images": [imgBlobMove],
+			"frames": {"width": 64, "height": 64, "regX": 32, "regY": 32},
+			"animations": {
+				"walk": [0, 9, "walk"]
 			}
 		});
 
